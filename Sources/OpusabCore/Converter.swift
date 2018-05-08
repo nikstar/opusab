@@ -1,7 +1,7 @@
 import Foundation
 
 final class Converter {
-    func generateCommand(filesMetadata: [FileMetadata]) -> [String] {
+    func generateCommand(filesMetadata: [FileMetadata], output: String) -> [String] {
         var command: [String] = [
             "opusenc",
             "--bitrate", "32",
@@ -17,10 +17,12 @@ final class Converter {
             acc += m.duration
             
             command.append(contentsOf: [
-                "--comment", "CHAPTER\(idx+1)=\(time)",
-                "--comment", "CHAPTER\(idx+1)NAME=\(m.name)"
+                "--comment", String(format: "CHAPTER%02d=\(time)", idx+1),
+                "--comment", String(format: "CHAPTER%02dNAME=\(m.name)", idx+1)
             ])
         }
+        
+        command.append(contentsOf: ["-", output])
         print(command.map { "\"\($0)\"" }.joined(separator: " "))
         return command
     }

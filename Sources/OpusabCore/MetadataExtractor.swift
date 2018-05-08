@@ -95,23 +95,10 @@ extension MetadataExtractor { // ffmpeg
     
     private func time(from string: String) -> Double {
         let t = string.split(separator: ":")
-        
         let h = Double(t[0])!
         let m = Double(t[1])!
-        
-//        let t2 = t[2]
-//            .replacingOccurrences(of: "\n", with: "")
-//            .split(separator: ".")
-//        let s = Double(t2[0])!
-//        let ms = Double(t2[1])! / 100.0
-
         let s = Double(t[2])!
-        
-        
-        let ms = 0.0
-        
-        print(h, m, s, ms)
-        return h * 3600 + m * 60 + s + ms
+        return h * 3600 + m * 60 + s
     }
 }
 

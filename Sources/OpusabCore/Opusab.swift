@@ -43,7 +43,7 @@ public final class Opusab {
         let filesMetadata = try metadata.gather()
         print(filesMetadata)
         
-        let opusArgs = Converter().generateCommand(filesMetadata: filesMetadata)
+        let opusArgs = Converter().generateCommand(filesMetadata: filesMetadata, output: outputPath!)
         print(opusArgs)
         
 //        let p1 = Process()
