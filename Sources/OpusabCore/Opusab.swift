@@ -12,6 +12,8 @@ public final class Opusab {
     }
     
     private func parseArguments(_ arguments: [String]) throws {
+        print(CommandLine.arguments)
+        
         let arguments = Array(arguments.dropFirst())
         
         let parser = ArgumentParser(
@@ -41,7 +43,12 @@ public final class Opusab {
         let filesMetadata = try metadata.gather()
         print(filesMetadata)
         
-        print(Converter().generateCommand(filesMetadata: filesMetadata))
+        let opusArgs = Converter().generateCommand(filesMetadata: filesMetadata)
+        print(opusArgs)
+        
+//        let p1 = Process()
+//        p1.launchPath = "
+        
     }
 }
 

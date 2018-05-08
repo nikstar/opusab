@@ -16,15 +16,22 @@ public final class MetadataExtractor {
     }
     
     private func getMetadata(for filename: String) throws -> FileMetadata {
-        let (trackName, album, author, rawDuration, rawBitrate) = try mediainfo(with: filename)
+        let m = try mediainfo(with: filename)
         let duration = ffmpeg(with: filename)
-        return FileMetadata(filename: filename, name: trackName, album: album, author: author, duration: duration, bitrate: 0)
+        return FileMetadata(filename: filename,
+            name: m.trackName, album: m.album, author: m.performer,
+            duration: duration)
     }
 }
 
+struct MediainfoMetadata {
+    var trackName: String
+    var album: String
+    var performer: String
+}
 
 extension MetadataExtractor { // mediainfo
-    fileprivate func mediainfo(with filename: String) throws -> (String, String, String, String, String) {
+    fileprivate func mediainfo(with filename: String) throws -> MediainfoMetadata {
         let string = Process.standardOutput(forProcessWithArguments:
             ["/usr/local/bin/mediainfo", filename])
         
@@ -58,10 +65,8 @@ extension MetadataExtractor { // mediainfo
         let trackName = extract(tag: "Track name", from: string)
         let album = extract(tag: "Album", from: string)
         let author = extract(tag: "Performer", from: string)
-        let bitrate = extract(tag: "Bit rate", from: string)
-        let duration = extract(tag: "Duration", from: string)
-        print(trackName, album, author, duration, bitrate)
-        return (trackName, album, author, duration, bitrate)
+        
+        return MediainfoMetadata(trackName: trackName, album: album, performer: author)
     }
     
     private func extract(tag: String, from string: String) -> String {
@@ -76,28 +81,37 @@ extension MetadataExtractor { // mediainfo
 
 
 extension MetadataExtractor { // ffmpeg
-    fileprivate func ffmpeg(with filename: String) -> Int {
+    fileprivate func ffmpeg(with filename: String) -> Double {
         let string = Process.standardOutput(forProcessWithArguments: [
             "/bin/bash", "-c",
-            "ffmpeg -nostats -hide_banner -nostdin -i \"\(filename)\" -f null /dev/null 2>&1 | grep 'time=' | egrep -o '\\d\\d:\\d\\d:\\d\\d.\\d\\d'"])
-        let duration = time(from: string)
+            "/usr/local/bin/ffmpeg -nostats -hide_banner -nostdin -i \"\(filename)\" -f null /dev/null 2>&1"])
+            .lazy
+            .split(separator: " ")
+            .first(where: { $0.hasPrefix("time=")})!
+            .dropFirst(5)
+        let duration = time(from: String(string))
         return duration
     }
     
-    private func time(from string: String) -> Int {
+    private func time(from string: String) -> Double {
         let t = string.split(separator: ":")
         
-        let h = Int(t[0])!
-        let m = Int(t[1])!
+        let h = Double(t[0])!
+        let m = Double(t[1])!
         
-        let t2 = t[2]
-            .replacingOccurrences(of: "\n", with: "")
-            .split(separator: ".")
-        let s = Int(t2[0])!
-        let ms = Int(t2[1])! * 10
+//        let t2 = t[2]
+//            .replacingOccurrences(of: "\n", with: "")
+//            .split(separator: ".")
+//        let s = Double(t2[0])!
+//        let ms = Double(t2[1])! / 100.0
+
+        let s = Double(t[2])!
+        
+        
+        let ms = 0.0
         
         print(h, m, s, ms)
-        return ((((h * 60) + m) * 60) + s) * 1000 + ms
+        return h * 3600 + m * 60 + s + ms
     }
 }
 
@@ -107,8 +121,7 @@ struct FileMetadata {
     let name: String
     let album: String
     let author: String
-    let duration: Int
-    let bitrate: Int
+    let duration: Double
 }
 
 
@@ -117,48 +130,12 @@ public extension Process {
         let process = Process()
         process.launchPath = args[0]
         process.arguments = Array(args.dropFirst())
+        print(args.map { "'\($0)'" }.joined(separator: " "))
         let output = Pipe()
         process.standardOutput = output
         process.launch()
         let data = output.fileHandleForReading.readDataToEndOfFile()
+        
         return String(data: data, encoding: .utf8)!
     }
 }
-
-
-
-extension String {
-    subscript(from start: Int, to end: Int) -> Substring {
-        let startIdx, endIdx: String.Index
-        if start >= 0 {
-            startIdx = index(startIndex, offsetBy: start)
-        } else {
-            startIdx = index(endIndex, offsetBy: start)
-        }
-        if end > 0 {
-            endIdx = index(startIndex, offsetBy: end)
-        } else {
-            endIdx =  index(endIndex, offsetBy: end)
-        }
-        return self[startIdx..<endIdx]
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
