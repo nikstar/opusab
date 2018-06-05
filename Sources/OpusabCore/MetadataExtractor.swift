@@ -3,16 +3,39 @@ import Foundation
 
 public final class MetadataExtractor {
     let filenames: [String]
+    let verbose: Bool
     
-    init(filenames: [String]) {
+    init(filenames: [String], verbose: Bool) {
         self.filenames = filenames
+        self.verbose = verbose
+        print(self, verbose)
     }
     
     func gather() throws -> [FileMetadata] {
-        return try filenames.map { (filename) -> FileMetadata in
-            print("Getting metadata for \(filename)")
-            return try self.getMetadata(for: filename)
+        let p = ProgressReporter(string: "Getting metadata", steps: filenames.count, verbose: verbose)
+        defer { p.terminate() }
+        var m = try filenames.map { (filename) -> FileMetadata in
+            p.nextStep(description: try! File(path: filename).name)
+            let metadata = try self.getMetadata(for: filename)
+            if verbose { print(metadata); print() }
+            return metadata
         }
+        if m.count > 1 { // remove prefixes
+            let prefix = commonPrefix(m.map { $0.name })
+            print("common prefix: ", prefix)
+            if prefix.count > 0 {
+                for i in 0..<m.count {
+                    if verbose {
+                        print(m[i])
+                    }
+                    m[i].name = String(m[i].name.dropFirst(prefix.count))
+                }
+            }
+        }
+        if verbose {
+            print(m)
+        }
+        return m
     }
     
     private func getMetadata(for filename: String) throws -> FileMetadata {
@@ -32,8 +55,8 @@ struct MediainfoMetadata {
 
 extension MetadataExtractor { // mediainfo
     fileprivate func mediainfo(with filename: String) throws -> MediainfoMetadata {
-        let string = Process.standardOutput(forProcessWithArguments:
-            ["/usr/local/bin/mediainfo", filename])
+        let string = Process(arguments:
+            ["/usr/local/bin/mediainfo", filename]).getOutput()
         
         /* output example
              General
@@ -62,29 +85,32 @@ extension MetadataExtractor { // mediainfo
              Stream size                              : 7.92 MiB (100%)
          */
         
-        let trackName = extract(tag: "Track name", from: string)
+        let trackName = extract(tag: "Track name", from: string) ?? (try! File(path: filename).nameExcludingExtension)
         let album = extract(tag: "Album", from: string)
         let author = extract(tag: "Performer", from: string)
         
-        return MediainfoMetadata(trackName: trackName, album: album, performer: author)
+        return MediainfoMetadata(trackName: trackName, album: album!, performer: author!)
     }
     
-    private func extract(tag: String, from string: String) -> String {
-        let result = string
+    private func extract(tag: String, from string: String) -> String? {
+        if verbose { print(tag, terminator: "=>") }
+        if let result = string
             .split(separator: "\n")
-            .first { $0.hasPrefix(tag) }!
-            .split(separator: ":", maxSplits: 2)[1]
-            .dropFirst()
-        return String(result)
+            .first(where: { $0.hasPrefix(tag) })?
+            .split(separator: ":", maxSplits: 1)[1]
+        .dropFirst() {
+            if verbose { print(result) }
+            return String(result)
+        }
+        if verbose { print("nil") }
+        return nil
     }
 }
 
 
 extension MetadataExtractor { // ffmpeg
     fileprivate func ffmpeg(with filename: String) -> Double {
-        let string = Process.standardOutput(forProcessWithArguments: [
-            "/bin/bash", "-c",
-            "/usr/local/bin/ffmpeg -nostats -hide_banner -nostdin -i \"\(filename)\" -f null /dev/null 2>&1"])
+        let string = Process(bashCommand: "/usr/local/bin/ffmpeg -nostats -hide_banner -nostdin -i \"\(filename)\" -f null /dev/null 2>&1").getOutput()
             .lazy
             .split(separator: " ")
             .first(where: { $0.hasPrefix("time=")})!
@@ -105,24 +131,22 @@ extension MetadataExtractor { // ffmpeg
 
 struct FileMetadata {
     let filename: String
-    let name: String
+    var name: String
     let album: String
     let author: String
     let duration: Double
 }
 
 
-public extension Process {
-    public static func standardOutput(forProcessWithArguments args: [String]) -> String {
-        let process = Process()
-        process.launchPath = args[0]
-        process.arguments = Array(args.dropFirst())
-        print(args.map { "'\($0)'" }.joined(separator: " "))
-        let output = Pipe()
-        process.standardOutput = output
-        process.launch()
-        let data = output.fileHandleForReading.readDataToEndOfFile()
-        
-        return String(data: data, encoding: .utf8)!
+func commonPrefix(_ strs: [String]) -> String {
+    guard strs.count > 0 else { return "" }
+    var prefix = strs[0]
+    loop: while prefix.count > 0 {
+        for s in strs.dropFirst() {
+            print(prefix, s)
+            if !s.hasPrefix(prefix) { prefix = String(prefix.dropLast()); continue loop }
+        }
+        break
     }
+    return prefix
 }
