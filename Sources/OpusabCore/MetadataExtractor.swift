@@ -58,8 +58,7 @@ struct MediainfoMetadata {
 
 extension MetadataExtractor { // mediainfo
     fileprivate func mediainfo(with filename: String) throws -> MediainfoMetadata {
-        let string = Process(arguments:
-            ["/usr/local/bin/mediainfo", filename]).getOutput()
+        let string = Process(["/usr/local/bin/mediainfo", filename]).getOutput()
         
         /* output example
              General
@@ -113,7 +112,8 @@ extension MetadataExtractor { // mediainfo
 
 extension MetadataExtractor { // ffmpeg
     fileprivate func ffmpeg(with filename: String) -> Double {
-        let string = Process(bashCommand: "/usr/local/bin/ffmpeg -nostats -hide_banner -nostdin -i \"\(filename)\" -f null /dev/null 2>&1").getOutput()
+        let string = Process
+            .bash("/usr/local/bin/ffmpeg -nostats -hide_banner -nostdin -i \"\(filename)\" -f null /dev/null 2>&1").getOutput()
             .lazy
             .split(separator: " ")
             .first(where: { $0.hasPrefix("time=")})!

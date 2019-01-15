@@ -82,7 +82,7 @@ public final class Opusab {
             return
         }
         
-        let finalCommand = Process(bashCommand: command)
+        let finalCommand = Process.bash(command)
         finalCommand.launch()
         finalCommand.waitUntilExit()
     }
@@ -103,16 +103,14 @@ public extension Opusab {
 }
 
 extension Process {
-    convenience init(arguments: [String]) {
+    convenience init(_ arguments: [String]) {
         self.init()
         self.launchPath = arguments.first!
         self.arguments = Array(arguments.dropFirst())
     }
     
-    convenience init(bashCommand: String) {
-        self.init(arguments: [
-            "/usr/bin/env", "bash", "-c", bashCommand
-        ])
+    class func bash(_ command: String) -> Process {
+        return Process(["/usr/bin/env", "bash", "-c", command])
     }
     
     func getOutput() -> String {
