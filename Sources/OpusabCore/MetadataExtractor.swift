@@ -12,7 +12,7 @@ public final class MetadataExtractor {
     }
     
     func gather() throws -> [FileMetadata] {
-        let p = ProgressReporter(string: "Getting metadata", steps: filenames.count, verbose: verbose)
+        let p = ProgressReporter(description: "Getting metadata", steps: filenames.count, verbose: verbose)
         defer { p.terminate() }
         var m = try filenames.map { (filename) -> FileMetadata in
             p.nextStep(description: try! File(path: filename).name)
@@ -29,6 +29,9 @@ public final class MetadataExtractor {
                         print(m[i])
                     }
                     m[i].name = String(m[i].name.dropFirst(prefix.count))
+                    if m[i].name == "" {
+                        m[i].name = String(format: "%03d", i+1)
+                    }
                 }
             }
         }
