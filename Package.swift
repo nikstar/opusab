@@ -6,12 +6,12 @@ import PackageDescription
 let package = Package(
     name: "Opusab",
     dependencies: [
-        .package(url: "https://github.com/apple/swift-package-manager.git", from: "0.1.0"),
+        .package(url: "https://github.com/apple/swift-package-manager.git", from: "0.3.0"),
         .package(url: "https://github.com/johnsundell/files.git", from: "1.0.0"),
     ],
     targets: [
         .target(
-            name: "Opusab",
+            name: "opusab",
             dependencies: ["OpusabCore"]),
         .target(
             name: "OpusabCore",
