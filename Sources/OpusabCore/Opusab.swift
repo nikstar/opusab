@@ -19,7 +19,7 @@ public final class Opusab {
         
         let parser = ArgumentParser(
             usage: "<options> files...",
-            overview: "Create Opus audobooks from a list of mp3 files")
+            overview: "Create Opus audiobooks from a list of mp3 files")
         let audioFiles = parser.add(positional: "files", kind: [String].self,
             usage: "audio files",
             completion: .filename)
