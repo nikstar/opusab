@@ -1,3 +1,3 @@
 # Opusab
 
-A description of this package.
+Create Opus audiobooks from a list of mp3 files
