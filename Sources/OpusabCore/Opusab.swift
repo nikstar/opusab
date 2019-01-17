@@ -28,7 +28,7 @@ public final class Opusab {
         let output = parser.add(option: "--output", shortName: "-o", kind: String.self,
              usage: "name of the output file")
         let cover = parser.add(option: "--cover", kind: String.self,
-             usage: "path to the cover file (unimplemented)",
+             usage: "path to the cover file",
              completion: .filename)
         let verbose = parser.add(option: "--verbose", shortName: "-v", kind: Bool.self,
              usage: "verbose output")

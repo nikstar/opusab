@@ -10,7 +10,6 @@ final class Converter {
             "--comment", "artist=\(filesMetadata[0].author)",
             "--comment", "album=\(filesMetadata[0].album)",
         ]
-        
         if let cover = cover {
             command.append(contentsOf: [
                 "--picture", cover
