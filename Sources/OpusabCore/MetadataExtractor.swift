@@ -114,7 +114,6 @@ extension MetadataExtractor { // ffmpeg
     fileprivate func ffmpeg(with filename: String) -> Double {
         let string = Process
             .bash("/usr/local/bin/ffmpeg -nostats -hide_banner -nostdin -i \"\(filename)\" -f null /dev/null 2>&1").getOutput()
-            .lazy
             .split(separator: " ")
             .first(where: { $0.hasPrefix("time=")})!
             .dropFirst(5)

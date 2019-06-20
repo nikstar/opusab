@@ -1,6 +1,6 @@
 import Files
 import Foundation
-import Utility
+import SPMUtility
 
 public final class Opusab {
     var outputPath: String!
@@ -69,7 +69,7 @@ public final class Opusab {
         var comp = [
            "cat"
         ]
-        comp.append(contentsOf: audioFiles.map { $0.shellEscaped() } )
+        comp.append(contentsOf: audioFiles.map { $0.spm_shellEscaped() } )
         comp.append("|")
         comp.append("ffmpeg -hide_banner -nostdin -loglevel fatal -nostats -f mp3 -i pipe:0 -f wav -")
         comp.append("|")
@@ -96,7 +96,7 @@ extension FileHandle: TextOutputStream {
 }
 
 public extension Opusab {
-    public enum Error: Swift.Error {
+    enum Error: Swift.Error {
         case missingFileName
         case failedToCreateFile
     }

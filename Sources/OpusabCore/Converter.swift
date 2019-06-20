@@ -29,7 +29,7 @@ final class Converter {
         }
         command.append(contentsOf: ["-", output])
         return command
-            .map { $0.shellEscaped() }
+            .map { $0.spm_shellEscaped() }
             .joined(separator: " ")
     }
     

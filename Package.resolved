@@ -6,17 +6,26 @@
         "repositoryURL": "https://github.com/johnsundell/files.git",
         "state": {
           "branch": null,
-          "revision": "c2b337cd9cbe91622830e7e0f8ca76845ba81ca6",
-          "version": "1.12.0"
+          "revision": "a84615f4558151fab52ac38df697ce2442991f93",
+          "version": "2.3.0"
+        }
+      },
+      {
+        "package": "llbuild",
+        "repositoryURL": "https://github.com/apple/swift-llbuild.git",
+        "state": {
+          "branch": "master",
+          "revision": "58212a6e3d02d7563423ee47f253c376c2bbb219",
+          "version": null
         }
       },
       {
         "package": "SwiftPM",
         "repositoryURL": "https://github.com/apple/swift-package-manager.git",
         "state": {
-          "branch": null,
-          "revision": "235aacc514cb81a6881364b0fedcb3dd083228f3",
-          "version": "0.3.0"
+          "branch": "master",
+          "revision": "f4bbde8cde74df4ffc2a4ec232803df38fc5797a",
+          "version": null
         }
       }
     ]
