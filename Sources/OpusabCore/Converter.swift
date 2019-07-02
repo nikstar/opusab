@@ -2,6 +2,8 @@ import Foundation
 
 final class Converter {
     func generateCommand(filesMetadata: [FileMetadata], output: String, bitrate: Int, cover: String?) -> String {
+        precondition(filesMetadata.count > 0)
+        
         var command: [String] = [
             "opusenc",
             "--bitrate", "\(bitrate)",

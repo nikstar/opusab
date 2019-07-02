@@ -1,11 +1,10 @@
-import os
+import Foundation
 import OpusabCore
-import SPMUtility
 
 do {
-    let tool = try Opusab()
-    try tool.run()
+    let opusab = try Opusab()
+    try opusab.run()
 } catch {
-    print("\(error)")
+    print(error.localizedDescription)
     exit(1)
 }

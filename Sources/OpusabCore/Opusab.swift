@@ -25,17 +25,16 @@ public final class Opusab: CLInterface {
     @Argument("--dry-run", "-n", usage: "print command but do not execute it", default: false)
     var dryRun: Bool!
     
-    public init(arguments: [String] = CommandLine.arguments) throws {
+    public init(arguments: [String]? = nil) throws {
         try parseArgs(arguments)
-        
     }
     
-    private func parseArgs(_ arguments: [String]) throws {
-        let arguments = Array(arguments.dropFirst())
+    private func parseArgs(_ arguments: [String]?) throws {
+        let arguments = Array(CommandLine.arguments.dropFirst())
         print(arguments)
         
-        parseArguments(arguments)
-        print(outputPath, coverPath, audioFiles, bitrate, verbose, dryRun)
+        try parseArguments(arguments)
+        print(outputPath as Any, coverPath as Any, audioFiles, bitrate!, verbose!, dryRun!)
 
         // verify files exist
         try self.audioFiles.forEach { _ = try File(path: $0) }
