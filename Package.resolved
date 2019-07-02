@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "CLInterface",
+        "repositoryURL": "https://github.com/nikstar/CLInterface.git",
+        "state": {
+          "branch": "master",
+          "revision": "7a09937ebdc90b61d5afa093cc6c4ed97c653627",
+          "version": null
+        }
+      },
+      {
         "package": "Files",
         "repositoryURL": "https://github.com/johnsundell/files.git",
         "state": {
@@ -15,7 +24,7 @@
         "repositoryURL": "https://github.com/apple/swift-llbuild.git",
         "state": {
           "branch": "master",
-          "revision": "58212a6e3d02d7563423ee47f253c376c2bbb219",
+          "revision": "7fe78e2af79a753cd5133ba792d4167bfeff34c1",
           "version": null
         }
       },
@@ -24,7 +33,7 @@
         "repositoryURL": "https://github.com/apple/swift-package-manager.git",
         "state": {
           "branch": "master",
-          "revision": "f4bbde8cde74df4ffc2a4ec232803df38fc5797a",
+          "revision": "7ab2275f447a5eb37497ed63a9340f8a6d1e488b",
           "version": null
         }
       }

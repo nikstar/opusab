@@ -1,5 +1,6 @@
 import os
 import OpusabCore
+import SPMUtility
 
 do {
     let tool = try Opusab()

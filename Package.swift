@@ -9,8 +9,8 @@ let package = Package(
         .executable(name: "opusab", targets: ["Opusab"])
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-package-manager.git", .branch("master")),
         .package(url: "https://github.com/johnsundell/files.git", from: "2.0.0"),
+        .package(url: "https://github.com/nikstar/CLInterface.git", .branch("master")),
     ],
     targets: [
         .target(
@@ -18,7 +18,7 @@ let package = Package(
             dependencies: ["OpusabCore"]),
         .target(
             name: "OpusabCore",
-            dependencies: ["Files", "SPMUtility"]),
+            dependencies: ["Files", "CLInterface"]),
         .target(
             name: "OpusabTest",
             dependencies: ["OpusabCore"]),
