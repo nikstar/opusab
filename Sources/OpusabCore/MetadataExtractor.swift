@@ -1,5 +1,6 @@
 import Files
 import Foundation
+import Proc
 
 public final class MetadataExtractor {
     let filenames: [String]
@@ -58,34 +59,15 @@ struct MediainfoMetadata {
 
 extension MetadataExtractor { // mediainfo
     fileprivate func mediainfo(with filename: String) throws -> MediainfoMetadata {
-        let string = Process(["/usr/local/bin/mediainfo", filename]).getOutput()
+        let string = try Proc("/usr/local/bin/mediainfo", filename)
+            .runForStdout()
         
-        /* output example
-             General
-             Complete name                            : /Volumes/Green/Audiobooks/LOTR/4.10 The Choices of Master Samwise.mp3
-             Format                                   : MPEG Audio
-             File size                                : 7.93 MiB
-             Duration                                 : 46 min 9 s
-             Overall bit rate mode                    : Constant
-             Overall bit rate                         : 24.0 kb/s
-             Album                                    : LotR Part II: The Two Towers
-             Track name                               : 4.10 The Choices of Master Samwise
-             Performer                                : J.R.R. Tolkien
-             Genre                                    : Books & Spoken
-         
-             Audio
-             Format                                   : MPEG Audio
-             Format version                           : Version 2
-             Format profile                           : Layer 3
-             Duration                                 : 46 min 9 s
-             Bit rate mode                            : Constant
-             Bit rate                                 : 24.0 kb/s
-             Channel(s)                               : 1 channel
-             Sampling rate                            : 22.05 kHz
-             Frame rate                               : 38.281 FPS (576 SPF)
-             Compression mode                         : Lossy
-             Stream size                              : 7.92 MiB (100%)
-         */
+//         output example
+//         ...
+//             Album                                    : LotR Part II: The Two Towers
+//             Track name                               : 4.10 The Choices of Master Samwise
+//             Performer                                : J.R.R. Tolkien
+//         ...
         
         let trackName = extract(tag: "Track name", from: string) ?? (try! File(path: filename).nameExcludingExtension)
         let album = extract(tag: "Album", from: string)
@@ -112,8 +94,8 @@ extension MetadataExtractor { // mediainfo
 
 extension MetadataExtractor { // ffmpeg
     fileprivate func ffmpeg(with filename: String) -> Double {
-        let string = Process
-            .bash("/usr/local/bin/ffmpeg -nostats -hide_banner -nostdin -i \"\(filename)\" -f null /dev/null 2>&1").getOutput()
+        let string = try! Proc("/bin/bash", "-c", "/usr/local/bin/ffmpeg -nostats -hide_banner -nostdin -i \"\(filename)\" -f null /dev/null 2>&1")
+            .runForStdout()
             .split(separator: " ")
             .first(where: { $0.hasPrefix("time=")})!
             .dropFirst(5)

@@ -77,23 +77,3 @@ public extension Opusab {
     }
 }
 
-extension Process {
-    convenience init(_ arguments: [String]) {
-        self.init()
-        self.launchPath = arguments.first!
-        self.arguments = Array(arguments.dropFirst())
-    }
-    
-    class func bash(_ command: String) -> Process {
-        return Process(["/usr/bin/env", "bash", "-c", command])
-    }
-    
-    func getOutput() -> String {
-        let output = Pipe()
-        self.standardOutput = output
-        self.launch()
-        let data = output.fileHandleForReading.readDataToEndOfFile()
-        return String(data: data, encoding: .utf8)!
-    }
-}
-
