@@ -13,7 +13,7 @@ struct FileMetadata {
 extension FileMetadata {
     init(file: String) throws {
         let m = try mediainfo(with: file)
-        let duration = ffmpeg(with: file)
+        let duration = accurateDuration(for: file)
         self.init(filename: file, name: m.trackName, album: m.album, author: m.performer, duration: duration)
     }
 }
@@ -85,8 +85,8 @@ fileprivate func extract(tag: String, from string: String) -> String? {
 }
 
 // MARK: - ffmpeg
-fileprivate func ffmpeg(with filename: String) -> Double {
-    let string = try! Proc("/bin/bash", "-c", "/usr/local/bin/ffmpeg -nostats -hide_banner -nostdin -i \"\(filename)\" -f null /dev/null 2>&1")
+fileprivate func accurateDuration(for file: String) -> Double {
+    let string = try! Proc.ffmpeg_accurateDuration(for: file)
         .runForStdout()
         .split(separator: " ")
         .first(where: { $0.hasPrefix("time=")})!

@@ -9,4 +9,8 @@ extension Proc {
         let args = commonArgs + [ "-f", "mp3", "-i", "pipe:0", "-f", "wav", "-" ]
         return Proc(opusencPath, args)
     }
+    
+    static func ffmpeg_accurateDuration(for file: String) -> Proc {
+        Proc("/bin/bash", "-c", "/usr/local/bin/ffmpeg -nostats -hide_banner -nostdin -i \"\(file)\" -f null /dev/null 2>&1")
+    }
 }
