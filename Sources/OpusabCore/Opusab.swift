@@ -1,6 +1,7 @@
 import Files
 import Foundation
 import CLInterface
+import Proc
 
 public final class Opusab: CLInterface {
     public var description = "Create Opus audiobooks from a list of mp3 files"
@@ -30,7 +31,7 @@ public final class Opusab: CLInterface {
     }
     
     private func parseArgs(_ arguments: [String]?) throws {
-        let arguments = Array(CommandLine.arguments.dropFirst())
+        let arguments = arguments ?? Array(CommandLine.arguments.dropFirst())
         print(arguments)
         
         try parseArguments(arguments)
@@ -47,34 +48,25 @@ public final class Opusab: CLInterface {
         let metadata = MetadataExtractor(filenames: audioFiles, verbose: verbose!)
         let filesMetadata = try metadata.gather()
         
-        let opusCommand = Converter().generateCommand(filesMetadata: filesMetadata, output: outputPath!, bitrate: bitrate!, cover: coverPath)
+        let ffmpegArgs = "-hide_banner -nostdin -loglevel fatal -nostats -f mp3 -i pipe:0 -f wav -"
+            .split(separator: " ")
+            .map(String.init)
         
-        var comp = [
-           "cat"
-        ]
-        comp.append(contentsOf: audioFiles.map { $0.spm_shellEscaped() } )
-        comp.append("|")
-        comp.append("ffmpeg -hide_banner -nostdin -loglevel fatal -nostats -f mp3 -i pipe:0 -f wav -")
-        comp.append("|")
-        comp.append(opusCommand)
+        let opusencArgs = Converter().generateCommand(filesMetadata: filesMetadata, output: outputPath!, bitrate: bitrate!, cover: coverPath)
         
-        let command  = comp.joined(separator: " ")
-        print(command)
+        let cat = Proc("/bin/cat", audioFiles)
+        let ffmpeg = Proc("/usr/local/bin/ffmpeg", ffmpegArgs)
+        let opusenc = Proc("/usr/local/bin/opusenc", opusencArgs)
+        
+        let p = cat.pipe(to: ffmpeg).pipe(to: opusenc)
+        print(p)
         
         if dryRun! {
             return
         }
         
-        let finalCommand = Process.bash(command)
-        finalCommand.launch()
-        finalCommand.waitUntilExit()
-    }
-}
-
-extension FileHandle: TextOutputStream {
-    public func write(_ string: String) {
-        guard let data = string.data(using: .utf8) else { return }
-        self.write(data)
+        try p.run()
+        p.waitUntilExit()
     }
 }
 

@@ -6,7 +6,7 @@
         "repositoryURL": "https://github.com/nikstar/CLInterface.git",
         "state": {
           "branch": "master",
-          "revision": "0ea477f9426847670d9b7d0f8f38dedc714cdb97",
+          "revision": "7c7e03493c0dd4afba41c88176ffb955537ff9ed",
           "version": null
         }
       },
@@ -17,6 +17,15 @@
           "branch": null,
           "revision": "a84615f4558151fab52ac38df697ce2442991f93",
           "version": "2.3.0"
+        }
+      },
+      {
+        "package": "Proc",
+        "repositoryURL": "https://github.com/nikstar/Proc.git",
+        "state": {
+          "branch": "master",
+          "revision": "84ae5b089798d09d260df73f39a7cfab328ec3ff",
+          "version": null
         }
       },
       {
@@ -33,7 +42,7 @@
         "repositoryURL": "https://github.com/apple/swift-package-manager.git",
         "state": {
           "branch": "master",
-          "revision": "7ab2275f447a5eb37497ed63a9340f8a6d1e488b",
+          "revision": "76e64727b3e94f55f2ef272689609260805e952a",
           "version": null
         }
       }

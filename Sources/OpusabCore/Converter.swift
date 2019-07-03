@@ -1,11 +1,11 @@
 import Foundation
 
 final class Converter {
-    func generateCommand(filesMetadata: [FileMetadata], output: String, bitrate: Int, cover: String?) -> String {
+    func generateCommand(filesMetadata: [FileMetadata], output: String, bitrate: Int, cover: String?) -> [String] {
         precondition(filesMetadata.count > 0)
         
         var command: [String] = [
-            "opusenc",
+//            "opusenc",
             "--bitrate", "\(bitrate)",
             "--downmix-mono",
             "--comment", "title=\(filesMetadata[0].album)",
@@ -31,8 +31,8 @@ final class Converter {
         }
         command.append(contentsOf: ["-", output])
         return command
-            .map { $0.spm_shellEscaped() }
-            .joined(separator: " ")
+//            .map { $0.spm_shellEscaped() }
+//            .joined(separator: " ")
     }
     
     private func timeString(acc: Double) -> String {
