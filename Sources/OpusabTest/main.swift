@@ -7,7 +7,7 @@ let all = [".build/debug/Opusab", "-o", "test.opus", "/Volumes/Green/Audiobooks/
 let args = Array(CommandLine.arguments.dropFirst())
 
 do {
-    let tool = try Opusab(arguments: short)
+    let tool = try Opusab(arguments: short + ["-n"])
     try tool.run()
 } catch {
     print("error: \(error)")

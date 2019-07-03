@@ -45,12 +45,12 @@ public final class Opusab: CLInterface {
     }
     
     public func run() throws {
-        let metadata = MetadataExtractor(filenames: audioFiles, verbose: verbose!)
-        let filesMetadata = try metadata.gather()
+        let metadata = try Metadata(files: audioFiles)
+        print(metadata)
         
         let cat = Proc("/bin/cat", audioFiles)
-        let ffmpeg = Proc.ffmpeg_mp3ToWav
-        let opusenc = Proc.opusenc(inputs: filesMetadata, output: outputPath!, bitrate: bitrate!, cover: coverPath)
+        let ffmpeg = Proc.ffmpeg_mp3ToWav()
+        let opusenc = Proc.opusenc(metadata: metadata, output: outputPath!, bitrate: bitrate!, cover: coverPath)
         
         let p = cat.pipe(to: ffmpeg).pipe(to: opusenc)
         print(p)

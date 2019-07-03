@@ -4,42 +4,38 @@ import Proc
 extension Proc {
     fileprivate static var opusencPath = "/usr/local/bin/opusenc"
     
-    static func opusenc(inputs: [FileMetadata], output: String, bitrate: Int, cover: String?) -> Proc {
-        let args = opusencArgs(inputs: inputs, output: output, bitrate: bitrate, cover: cover)
+    static func opusenc(metadata: Metadata, output: String, bitrate: Int, cover: String?) -> Proc {
+        let args = opusencArgs(metadata: metadata, output: output, bitrate: bitrate, cover: cover)
         return Proc(opusencPath, args)
     }
 }
 
-fileprivate func opusencArgs(inputs: [FileMetadata], output: String, bitrate: Int, cover: String?) -> [String] {
-    precondition(inputs.count > 0, "Expected at least one input file")
-    
+fileprivate func opusencArgs(metadata: Metadata, output: String, bitrate: Int, cover: String?) -> [String] {
     var args = [
         "--bitrate", "\(bitrate)",
         "--downmix-mono",
-        "--comment", "title=\(inputs[0].album)",
-        "--comment", "artist=\(inputs[0].author)",
-        "--comment", "album=\(inputs[0].album)",
+        "--comment", "title=\(metadata.title)",
+        "--comment", "artist=\(metadata.author)",
+        "--comment", "album=\(metadata.title)",
     ]
     if let cover = cover {
         args += [ "--picture", cover ]
     }
-    var acc = 0.0
-    for (idx, m) in inputs.enumerated() {
-        defer { acc += m.duration }
-        let time = timeString(acc: acc)
+    for (idx, chapter) in metadata.chapters.enumerated() {
+        let time = timeString(time: chapter.start)
         args += [
             "--comment", String(format: "CHAPTER%03d=\(time)", idx+1),
-            "--comment", String(format: "CHAPTER%03dNAME=\(m.name)", idx+1)
+            "--comment", String(format: "CHAPTER%03dNAME=\(chapter.name)", idx+1)
         ]
     }
     args += ["-", output]
     return args
 }
 
-fileprivate func timeString(acc: Double) -> String {
-    let sec = acc.truncatingRemainder(dividingBy: 60.0)
-    let min = Int(acc) / 60 % 60
-    let h = Int(acc) / 3_600
+fileprivate func timeString(time: Double) -> String {
+    let sec = time.truncatingRemainder(dividingBy: 60.0)
+    let min = Int(time) / 60 % 60
+    let h = Int(time) / 3_600
     return String(format: "%02d:%02d:%06.3lf", h, min, sec)
 }
 
