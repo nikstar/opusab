@@ -52,11 +52,9 @@ public final class Opusab: CLInterface {
             .split(separator: " ")
             .map(String.init)
         
-        let opusencArgs = Converter().generateCommand(filesMetadata: filesMetadata, output: outputPath!, bitrate: bitrate!, cover: coverPath)
-        
         let cat = Proc("/bin/cat", audioFiles)
         let ffmpeg = Proc("/usr/local/bin/ffmpeg", ffmpegArgs)
-        let opusenc = Proc("/usr/local/bin/opusenc", opusencArgs)
+        let opusenc = Proc.opusenc(inputs: filesMetadata, output: outputPath!, bitrate: bitrate!, cover: coverPath)
         
         let p = cat.pipe(to: ffmpeg).pipe(to: opusenc)
         print(p)
