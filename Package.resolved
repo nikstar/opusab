@@ -6,7 +6,7 @@
         "repositoryURL": "https://github.com/nikstar/CLInterface.git",
         "state": {
           "branch": "master",
-          "revision": "7c7e03493c0dd4afba41c88176ffb955537ff9ed",
+          "revision": "0c4d4b55bff5f1b81b5ad65e3b2569575e685d78",
           "version": null
         }
       },
@@ -42,7 +42,7 @@
         "repositoryURL": "https://github.com/apple/swift-package-manager.git",
         "state": {
           "branch": "master",
-          "revision": "76e64727b3e94f55f2ef272689609260805e952a",
+          "revision": "8032dc7f9288d1447d85df344bef28fef19a768c",
           "version": null
         }
       }
