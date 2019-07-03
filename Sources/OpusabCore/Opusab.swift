@@ -16,7 +16,6 @@ public final class Opusab: CLInterface {
     @PositionalArguments(name: "files", usage: "audio files")
     var audioFiles: [String]
     
-    // TODO: add default value to description
     @Argument("--bitrate", "-b", usage: "bitrate in kbits (default 32)", default: 32)
     var bitrate: Int!
     
@@ -27,25 +26,16 @@ public final class Opusab: CLInterface {
     var dryRun: Bool!
     
     public init(arguments: [String]? = nil) throws {
-        try parseArgs(arguments)
-    }
-    
-    private func parseArgs(_ arguments: [String]?) throws {
         let arguments = arguments ?? Array(CommandLine.arguments.dropFirst())
-        print(arguments)
-        
         try parseArguments(arguments)
-        print(outputPath as Any, coverPath as Any, audioFiles, bitrate!, verbose!, dryRun!)
 
         // verify files exist
-        try self.audioFiles.forEach { _ = try File(path: $0) }
-        if let coverPath = coverPath {
-            _ = try File(path: coverPath)
-        }
+        try audioFiles.forEach { _ = try File(path: $0) }
+        try coverPath.flatMap { _ = try File(path: $0) }
     }
     
     public func run() throws {
-        let metadata = try Metadata(files: audioFiles)
+        let metadata = try Metadata(files: audioFiles, verbose: verbose)
         print(metadata)
         
         let cat = Proc("/bin/cat", audioFiles)

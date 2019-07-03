@@ -8,9 +8,10 @@ struct Metadata {
 }
 
 extension Metadata {
-    init(files: [String], verbose: Bool = false) throws {
+    init(files: [String], verbose: Bool) throws {
         precondition(files.count > 0, "At least one input file required")
         let progressReporter = ProgressReporter(description: "Parsing metadata", steps: files.count, verbose: verbose)
+        defer { progressReporter.terminate() }
         var filesMetadata = try files.map(reporter: progressReporter) { try FileMetadata(file: $0) }
         let title = filesMetadata.first!.album
         let author = filesMetadata.first!.author
