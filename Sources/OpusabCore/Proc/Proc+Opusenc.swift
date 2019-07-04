@@ -13,10 +13,10 @@ extension Proc {
 fileprivate func opusencArgs(metadata: Metadata, output: String, bitrate: Int, cover: String?) -> [String] {
     var args = [
         "--bitrate", "\(bitrate)",
-        "--downmix-mono",
-        "--comment", "title=\(metadata.title)",
-        "--comment", "artist=\(metadata.author)",
-        "--comment", "album=\(metadata.title)",
+        "--downmix-mono", // TODO: Explore importance
+        "--title", metadata.title,
+        "--artist", metadata.author,
+        "--album", metadata.title, // TODO: See if used anywhere
     ]
     if let cover = cover {
         args += [ "--picture", cover ]
