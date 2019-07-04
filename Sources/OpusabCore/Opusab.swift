@@ -8,7 +8,7 @@ public final class Opusab: CLInterface {
     public var optionsString = "<options> files..."
     
     @Argument("--output", "-o", usage: "name of the output file")
-    var outputPath: String!
+    var outputPath: String
     
     @Argument("--cover", usage: "path to the cover file")
     var coverPath: String?
@@ -17,13 +17,13 @@ public final class Opusab: CLInterface {
     var audioFiles: [String]
     
     @Argument("--bitrate", "-b", usage: "bitrate in kbits (default 32)", default: 32)
-    var bitrate: Int!
+    var bitrate: Int
     
     @Argument("--verbose", "-v", usage: "verbose output", default: false)
-    var verbose: Bool!
+    var verbose: Bool
     
     @Argument("--dry-run", "-n", usage: "print command but do not execute it", default: false)
-    var dryRun: Bool!
+    var dryRun: Bool
     
     public init(arguments: [String]? = nil) throws {
         let arguments = arguments ?? Array(CommandLine.arguments.dropFirst())
@@ -40,12 +40,12 @@ public final class Opusab: CLInterface {
         
         let cat = Proc("/bin/cat", audioFiles)
         let ffmpeg = Proc.ffmpeg_mp3ToWav()
-        let opusenc = Proc.opusenc(metadata: metadata, output: outputPath!, bitrate: bitrate!, cover: coverPath)
+        let opusenc = Proc.opusenc(metadata: metadata, output: outputPath, bitrate: bitrate, cover: coverPath)
         
         let p = cat.pipe(to: ffmpeg).pipe(to: opusenc)
         print(p)
         
-        if dryRun! {
+        if dryRun {
             return
         }
         

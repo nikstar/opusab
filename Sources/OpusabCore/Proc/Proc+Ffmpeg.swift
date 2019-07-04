@@ -20,7 +20,7 @@ extension Proc {
     }
 }
 
-extension Double {
+fileprivate extension Double {
     init(ffmpegTime string: String) {
         let t = string.split(separator: ":")
         let h = Double(t[0])!
