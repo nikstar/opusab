@@ -13,7 +13,7 @@ extension Proc {
         let data = try Proc("/usr/local/bin/mediainfo", "--Output=JSON", filename)
             .runForStdout()
             .data(using: .utf8)!
-        let metadata = try! JSONDecoder().decode(Mediainfo.self, from: data)
+        let metadata = try JSONDecoder().decode(Mediainfo.self, from: data)
         
         let trackName = metadata.media.track[0].Track ?? (try! File(path: filename).nameExcludingExtension)
         let album = metadata.media.track[0].Album!
