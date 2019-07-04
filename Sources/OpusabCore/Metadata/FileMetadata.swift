@@ -12,8 +12,8 @@ struct FileMetadata {
 
 extension FileMetadata {
     init(file: String) throws {
-        let m = try mediainfo(with: file)
-        let duration = accurateDuration(for: file)
+        let m = try Proc.mediainfo(file)
+        let duration = Proc.ffmpeg_accurateDuration(for: file)
         self.init(filename: file, name: m.trackName, album: m.album, author: m.performer, duration: duration)
     }
 }
@@ -46,61 +46,4 @@ fileprivate extension Array where Element == String {
         return prefix
     }
 }
-
-// MARK: - mediainfo
-struct MediainfoMetadata {
-    var trackName: String
-    var album: String
-    var performer: String
-}
-
-fileprivate func mediainfo(with filename: String) throws -> MediainfoMetadata {
-    let string = try Proc("/usr/local/bin/mediainfo", filename)
-        .runForStdout()
-    
-//         output example
-//         ...
-//             Album                                    : LotR Part II: The Two Towers
-//             Track name                               : 4.10 The Choices of Master Samwise
-//             Performer                                : J.R.R. Tolkien
-//         ...
-    
-    let trackName = extract(tag: "Track name", from: string) ?? (try! File(path: filename).nameExcludingExtension)
-    let album = extract(tag: "Album", from: string)
-    let author = extract(tag: "Performer", from: string)
-    
-    return MediainfoMetadata(trackName: trackName, album: album!, performer: author!)
-}
-
-fileprivate func extract(tag: String, from string: String) -> String? {
-    if let result = string
-        .split(separator: "\n")
-        .first(where: { $0.hasPrefix(tag) })?
-        .split(separator: ":", maxSplits: 1)[1]
-        .dropFirst() {
-//        if verbose { print(result) }
-        return String(result)
-    }
-    return nil
-}
-
-// MARK: - ffmpeg
-fileprivate func accurateDuration(for file: String) -> Double {
-    let string = try! Proc.ffmpeg_accurateDuration(for: file)
-        .runForStdout()
-        .split(separator: " ")
-        .first(where: { $0.hasPrefix("time=")})!
-        .dropFirst(5)
-    let duration = time(from: String(string))
-    return duration
-}
-
-private func time(from string: String) -> Double {
-    let t = string.split(separator: ":")
-    let h = Double(t[0])!
-    let m = Double(t[1])!
-    let s = Double(t[2])!
-    return h * 3600 + m * 60 + s
-}
-
 

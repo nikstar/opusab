@@ -10,7 +10,22 @@ extension Proc {
         return Proc(opusencPath, args)
     }
     
-    static func ffmpeg_accurateDuration(for file: String) -> Proc {
-        Proc("/bin/bash", "-c", "/usr/local/bin/ffmpeg -nostats -hide_banner -nostdin -i \"\(file)\" -f null /dev/null 2>&1")
+    static func ffmpeg_accurateDuration(for file: String) -> Double {
+        let string = try! Proc("/bin/bash", "-c", "/usr/local/bin/ffmpeg -nostats -hide_banner -nostdin -i \"\(file)\" -f null /dev/null 2>&1")
+            .runForStdout()
+            .split(separator: " ")
+            .first(where: { $0.hasPrefix("time=")})!
+            .dropFirst(5)
+        return Double(ffmpegTime: String(string))
+    }
+}
+
+extension Double {
+    init(ffmpegTime string: String) {
+        let t = string.split(separator: ":")
+        let h = Double(t[0])!
+        let m = Double(t[1])!
+        let s = Double(t[2])!
+        self = h * 3600 + m * 60 + s
     }
 }
