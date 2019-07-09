@@ -30,7 +30,7 @@ fileprivate func opusencArgs(metadata: Metadata, output: String, bitrate: Int, c
     return args
 }
 
-fileprivate func timeString(time: Double) -> String {
+func timeString(time: Double) -> String {
     let sec = time.truncatingRemainder(dividingBy: 60.0)
     let min = Int(time) / 60 % 60
     let h = Int(time) / 3_600

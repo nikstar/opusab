@@ -36,28 +36,20 @@ public final class Opusab: CLInterface {
     
     public func run() throws {
         let metadata = try Metadata(files: audioFiles, verbose: verbose)
-        print(metadata)
+        print("""
+            \(metadata.title) by \(metadata.author)
+            \(metadata.chapters.count) chapters; total duration: \(timeString(time: metadata.totalDuration))
+            """)
         
         let cat = Proc("/bin/cat", audioFiles)
         let ffmpeg = Proc.ffmpeg_mp3ToWav()
         let opusenc = Proc.opusenc(metadata: metadata, output: outputPath, bitrate: bitrate, cover: coverPath)
         
         let p = cat.pipe(to: ffmpeg).pipe(to: opusenc)
-        print(p)
+        if verbose || dryRun { print("final command: \(p)") }
         
-        if dryRun {
-            return
-        }
-        
+        guard !dryRun else { return }
         try p.run()
         p.waitUntilExit()
     }
 }
-
-public extension Opusab {
-    enum Error: Swift.Error {
-        case missingFileName
-        case failedToCreateFile
-    }
-}
-
