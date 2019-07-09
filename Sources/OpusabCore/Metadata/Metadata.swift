@@ -8,7 +8,7 @@ struct Metadata {
 }
 
 extension Metadata {
-    init(files: [String], verbose: Bool) throws {
+    init(files: [String], verbose: Bool = false) throws {
         precondition(files.count > 0, "At least one input file required")
         let progressReporter = ProgressReporter(description: "Parsing metadata", steps: files.count, verbose: verbose)
         defer { progressReporter.terminate() }

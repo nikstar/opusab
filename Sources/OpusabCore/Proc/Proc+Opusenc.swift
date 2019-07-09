@@ -2,18 +2,16 @@ import Foundation
 import Proc
 
 extension Proc {
-    fileprivate static var opusencPath = "/usr/local/bin/opusenc"
-    
     static func opusenc(metadata: Metadata, output: String, bitrate: Int, cover: String?) -> Proc {
         let args = opusencArgs(metadata: metadata, output: output, bitrate: bitrate, cover: cover)
-        return Proc(opusencPath, args)
+        return Proc(name: "opusenc", args)
     }
 }
 
 fileprivate func opusencArgs(metadata: Metadata, output: String, bitrate: Int, cover: String?) -> [String] {
     var args = [
         "--bitrate", "\(bitrate)",
-        "--downmix-mono", // TODO: Explore importance
+        "--downmix-mono", // TODO: Explore importance, should probably remove
         "--title", metadata.title,
         "--artist", metadata.author,
         "--album", metadata.title, // TODO: See if used anywhere

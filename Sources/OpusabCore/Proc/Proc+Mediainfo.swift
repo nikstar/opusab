@@ -10,7 +10,7 @@ struct MediainfoMetadata {
 
 extension Proc {
     static func mediainfo(_ filename: String) throws -> MediainfoMetadata {
-        let data = try Proc("/usr/local/bin/mediainfo", "--Output=JSON", filename)
+        let data = try Proc(name: "mediainfo", "--Output=JSON", filename)
             .runForStdout()
             .data(using: .utf8)!
         let metadata = try JSONDecoder().decode(Mediainfo.self, from: data)
