@@ -29,7 +29,7 @@ brew install nikstar/tap/opusab --HEAD
 
 ## Bitrates
 + 48 kbit/s or higher should only be used for high quality sources with occasional background music
-+ 32 kbits/s is a **good default** that should be used to convert, for example, 120 kbits/s mp3s
++ 32 kbit/s is a **good default** that should be used to convert, for example, 120 kbit/s mp3s
 + 24 kbit/s offers good quality and I personally cannot tell difference from 32 kbit/s, but you might :)
 + 16 kbit/s is perfectly intelligible and gives you tiny files at just **7.2 MB per hour**
 
