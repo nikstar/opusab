@@ -38,7 +38,7 @@ public final class Opusab: CLInterface {
         let metadata = try Metadata(files: audioFiles, verbose: verbose)
         print("""
             \(metadata.title) by \(metadata.author)
-            \(metadata.chapters.count) chapters; total duration: \(timeString(time: metadata.totalDuration))
+            \(metadata.chapters.count) chapters; total duration: \(String(time: metadata.totalDuration))
             """)
         
         let cat = Proc("/bin/cat", audioFiles)

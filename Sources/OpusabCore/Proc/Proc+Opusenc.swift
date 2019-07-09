@@ -20,7 +20,7 @@ fileprivate func opusencArgs(metadata: Metadata, output: String, bitrate: Int, c
         args += [ "--picture", cover ]
     }
     for (idx, chapter) in metadata.chapters.enumerated() {
-        let time = timeString(time: chapter.start)
+        let time = String(time: chapter.start)
         args += [
             "--comment", String(format: "CHAPTER%03d=\(time)", idx+1),
             "--comment", String(format: "CHAPTER%03dNAME=\(chapter.name)", idx+1)
@@ -30,11 +30,11 @@ fileprivate func opusencArgs(metadata: Metadata, output: String, bitrate: Int, c
     return args
 }
 
-func timeString(time: Double) -> String {
-    let sec = time.truncatingRemainder(dividingBy: 60.0)
-    let min = Int(time) / 60 % 60
-    let h = Int(time) / 3_600
-    return String(format: "%02d:%02d:%06.3lf", h, min, sec)
+extension String {
+    init(time: Double) {
+        let sec = time.truncatingRemainder(dividingBy: 60.0)
+        let min = Int(time) / 60 % 60
+        let h = Int(time) / 3_600
+        self = .init(format: "%02d:%02d:%06.3lf", h, min, sec)
+    }
 }
-
-
