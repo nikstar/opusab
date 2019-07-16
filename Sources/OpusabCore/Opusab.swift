@@ -7,26 +7,32 @@ public final class Opusab: CLInterface {
     public var description = "Create Opus audiobooks from a list of mp3 files"
     public var optionsString = "<options> files..."
     
-    @Argument("--output", "-o", usage: "name of the output file")
-    var outputPath: String
-    
-    @Argument("--cover", "-c", usage: "path to the cover file")
-    var coverPath: String?
+    // MARK: input and output
     
     @PositionalArguments(name: "files", usage: "audio files")
     var audioFiles: [String]
+
+    @Argument("--output", "-o", usage: "name of the output file")
+    var outputPath: String
+    
+    // MARK: configuration
+    
+    @Argument("--cover", "-c", usage: "path to the cover file")
+    var coverPath: String?
     
     @Argument("--bitrate", "-b", usage: "bitrate in kbits (default 32)", default: 32)
     var bitrate: Int
     
     @Argument("--verbose", "-v", usage: "verbose output", default: false)
     var verbose: Bool
+
+    @Argument("--dry-run", "-n", usage: "do not execute final command", default: false)
+    var dryRun: Bool
+    
+    // MARK: metadata
     
     @Argument("--print-metadata", "-p", usage: "print metadata to standard output", default: false)
     var printMetadata: Bool
-    
-    @Argument("--dry-run", "-n", usage: "do not execute final command", default: false)
-    var dryRun: Bool
     
     @Argument("--metadata", "-m", usage: "json file, containing metadata (optional)")
     var metadataPath: String?
