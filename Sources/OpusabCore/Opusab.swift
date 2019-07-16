@@ -40,21 +40,14 @@ public final class Opusab: CLInterface {
     public init(arguments: [String]? = nil) throws {
         let arguments = arguments ?? Array(CommandLine.arguments.dropFirst())
         try parseArguments(arguments)
-
-        // verify files exist
-        try audioFiles.forEach { _ = try File(path: $0) }
-        try coverPath.map { _ = try File(path: $0) }
-        try metadataPath.map { _ = try File(path: $0) }
+        try verifyFilesExist()
     }
     
     public func run() throws {
         let metadata = try loadMetadataFromDisk() ?? Metadata(files: audioFiles, verbose: verbose)
         print(metadata.overview, to: &stderr)
         if printMetadata || verbose {
-            let e = JSONEncoder()
-            e.outputFormatting = .prettyPrinted
-            let data = try e.encode(metadata)
-            print(String(data: data, encoding: .utf8)!)
+            metadata.printJSON()
         }
         
         let cat = Proc("/bin/cat", audioFiles)
@@ -71,12 +64,18 @@ public final class Opusab: CLInterface {
         }
     }
     
+    fileprivate func verifyFilesExist() throws {
+        try audioFiles.forEach { _ = try File(path: $0) }
+        try coverPath.map { _ = try File(path: $0) }
+        try metadataPath.map { _ = try File(path: $0) }
+    }
+    
     private func loadMetadataFromDisk() throws -> Metadata? {
         return try metadataPath.map { path in
-                let url = URL(fileURLWithPath: path)
-                let data = try Data(contentsOf: url)
-                let d = JSONDecoder()
-                return try d.decode(Metadata.self, from: data)
-            }
+            let url = URL(fileURLWithPath: path)
+            let data = try Data(contentsOf: url)
+            let d = JSONDecoder()
+            return try d.decode(Metadata.self, from: data)
+        }
     }
 }

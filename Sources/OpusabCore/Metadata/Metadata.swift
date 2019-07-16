@@ -16,6 +16,13 @@ extension Metadata {
         \(chapters.count) chapters; total duration: \(String(time: totalDuration))
         """
     }
+
+    func printJSON() {
+        let e = JSONEncoder()
+        e.outputFormatting = .prettyPrinted
+        let data = try e.encode(metadata)
+        print(String(data: data, encoding: .utf8)!)
+    }
 }
 
 extension Metadata {
