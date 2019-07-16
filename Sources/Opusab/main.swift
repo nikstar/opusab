@@ -5,6 +5,6 @@ do {
     let opusab = try Opusab()
     try opusab.run()
 } catch {
-    print(error.localizedDescription)
+    print("error: \(error)", &stderr)
     exit(1)
 }

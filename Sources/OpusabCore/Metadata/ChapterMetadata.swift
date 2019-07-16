@@ -5,6 +5,8 @@ struct ChapterMetadata {
     var start: Double
 }
 
+extension ChapterMetadata : Codable {}
+
 extension Array where Element == ChapterMetadata {
     init(files: [FileMetadata]) {
         var acc = 0.0

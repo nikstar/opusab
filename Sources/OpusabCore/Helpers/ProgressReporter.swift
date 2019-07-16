@@ -20,11 +20,11 @@ final class ProgressReporter {
         let line = "\(string) (\(currentStep)/\(steps)): \(description)"
         
         if verbose == false {
-            print("\r" + String(repeating: " ", count: descriptionLength) + "\r", terminator: "")
-            print(line, terminator: "")
-            fflush(__stdoutp)
+            print("\r" + String(repeating: " ", count: descriptionLength) + "\r", terminator: "", to: &stderr)
+            print(line, terminator: "", to: &stderr)
+            stderr.flush()
         } else {
-            print(line)
+            print(line, to: &stderr)
         }
         
         descriptionLength = line.count
@@ -33,7 +33,7 @@ final class ProgressReporter {
     
     func terminate() {
         assert(terminated == false)
-        print()
+        print("", to: &stderr)
         terminated = true
     }
 }

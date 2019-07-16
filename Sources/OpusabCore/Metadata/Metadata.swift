@@ -7,6 +7,17 @@ struct Metadata {
     var totalDuration: Double
 }
 
+extension Metadata : Codable {}
+
+extension Metadata {
+    var overview: String {
+        """
+        \(title) by \(author)
+        \(chapters.count) chapters; total duration: \(String(time: totalDuration))
+        """
+    }
+}
+
 extension Metadata {
     init(files: [String], verbose: Bool = false) throws {
         precondition(files.count > 0, "At least one input file required")
