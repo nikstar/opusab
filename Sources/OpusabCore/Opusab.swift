@@ -38,7 +38,6 @@ public final class Opusab: CLInterface {
     var metadataPath: String?
     
     public init(arguments: [String]? = nil) throws {
-        let arguments = arguments ?? Array(CommandLine.arguments.dropFirst())
         try parseArguments(arguments)
         try verifyFilesExist()
     }

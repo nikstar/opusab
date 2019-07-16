@@ -6,7 +6,7 @@
         "repositoryURL": "https://github.com/nikstar/CLInterface.git",
         "state": {
           "branch": "master",
-          "revision": "e2b4085574127a578c841d69ec78400818796aa7",
+          "revision": "099c09cc27e786167c66b51d204136f6de662129",
           "version": null
         }
       },
@@ -33,7 +33,7 @@
         "repositoryURL": "https://github.com/apple/swift-llbuild.git",
         "state": {
           "branch": "master",
-          "revision": "7fe78e2af79a753cd5133ba792d4167bfeff34c1",
+          "revision": "ed4b3b6e02aef5faaa37a3fbb0e7f2c561a0a398",
           "version": null
         }
       },
@@ -42,7 +42,7 @@
         "repositoryURL": "https://github.com/apple/swift-package-manager.git",
         "state": {
           "branch": "master",
-          "revision": "d998101511d5c266206dd3bef3ea24f31144c6b5",
+          "revision": "318fc16d7cf05221e7152d7ec805be230edeebd7",
           "version": null
         }
       }

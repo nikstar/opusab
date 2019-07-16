@@ -15,4 +15,4 @@ public struct Stderr : TextOutputStream {
     }
 }
 
-var stderr = Stderr()
+public var stderr = Stderr()

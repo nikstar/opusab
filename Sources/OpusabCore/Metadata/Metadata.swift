@@ -20,7 +20,7 @@ extension Metadata {
     func printJSON() {
         let e = JSONEncoder()
         e.outputFormatting = .prettyPrinted
-        let data = try e.encode(metadata)
+        let data = try! e.encode(self)
         print(String(data: data, encoding: .utf8)!)
     }
 }
