@@ -45,4 +45,3 @@ fileprivate extension Array where Element == String {
         return prefix
     }
 }
-

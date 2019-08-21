@@ -9,7 +9,7 @@ public final class Opusab: CLInterface {
     
     // MARK: input and output
     
-    @PositionalArguments(name: "files", usage: "audio files")
+    @PositionalArgument(name: "files", usage: "audio files")
     var audioFiles: [String]
 
     @Argument("--output", "-o", usage: "name of the output file")

@@ -13,7 +13,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/johnsundell/files.git", from: "2.0.0"),
-        .package(url: "https://github.com/nikstar/CLInterface.git", from: "1.0.0"),
+        .package(url: "https://github.com/nikstar/CLInterface.git", from: "1.0.3"),
         .package(url: "https://github.com/nikstar/Proc.git", .branch("master")),
     ],
     targets: [

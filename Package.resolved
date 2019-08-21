@@ -5,9 +5,9 @@
         "package": "CLInterface",
         "repositoryURL": "https://github.com/nikstar/CLInterface.git",
         "state": {
-          "branch": "master",
-          "revision": "099c09cc27e786167c66b51d204136f6de662129",
-          "version": null
+          "branch": null,
+          "revision": "eaa70221f5a42f43fccf1ce05eab5492a4938d4c",
+          "version": "1.0.3"
         }
       },
       {
@@ -29,21 +29,12 @@
         }
       },
       {
-        "package": "llbuild",
-        "repositoryURL": "https://github.com/apple/swift-llbuild.git",
+        "package": "SPMArgumentParser",
+        "repositoryURL": "https://github.com/nikstar/spm-argument-parser.git",
         "state": {
-          "branch": "master",
-          "revision": "ed4b3b6e02aef5faaa37a3fbb0e7f2c561a0a398",
-          "version": null
-        }
-      },
-      {
-        "package": "SwiftPM",
-        "repositoryURL": "https://github.com/apple/swift-package-manager.git",
-        "state": {
-          "branch": "master",
-          "revision": "318fc16d7cf05221e7152d7ec805be230edeebd7",
-          "version": null
+          "branch": null,
+          "revision": "e3c4895261730adf46ab012af05a3729871a15a1",
+          "version": "0.5.0"
         }
       }
     ]
