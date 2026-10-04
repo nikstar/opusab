@@ -1,16 +1,26 @@
-prefix ?= /usr/local
-bindir = $(prefix)/bin
+CARGO ?= cargo
+prefix ?= $(HOME)/.local
 
 build:
-	swift build -c release --disable-sandbox
+	$(CARGO) build --release --locked
 
+check:
+	$(CARGO) fmt --check
+	$(CARGO) clippy --all-targets --locked -- -D warnings
+	$(CARGO) test --all-targets --locked
+
+runtime:
+	scripts/build-ffmpeg.sh
+
+package:
+	scripts/package-macos.sh
+
+# Installs the CLI only; use install.sh in the portable package for a bundled install.
 install: build
-	install ".build/release/opusab" "$(bindir)"
-
-uninstall:
-	rm -rf "$(bindir)/opusab"
+	install -d "$(prefix)/bin"
+	install target/release/opusab "$(prefix)/bin/opusab"
 
 clean:
-	rm -rf .build
+	$(CARGO) clean
 
-.PHONY: build install uninstall clean
+.PHONY: build check runtime package install clean

@@ -3,3 +3,8 @@
 /Packages
 /.swiftpm
 /*.xcodeproj
+/target/
+/.local/
+/dist/
+/runtime/
+*.opusab-journal
